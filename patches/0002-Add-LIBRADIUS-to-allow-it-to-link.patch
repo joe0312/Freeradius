@@ -1,0 +1,19 @@
+From: patch <patch@patch>
+Date: Wed, 13 Apr 2016 19:30:07 +0800
+Subject: Add $(LIBRADIUS) to allow it to link
+
+commit from 4be493a755311607fed91ed5181628e8c2ec57a2
+
+diff --git a/src/modules/rlm_eap/Makefile.in b/src/modules/rlm_eap/Makefile.in
+index 5779714..d0bfda7 100644
+--- a/src/modules/rlm_eap/Makefile.in
++++ b/src/modules/rlm_eap/Makefile.in
+@@ -6,7 +6,7 @@ TARGET      = @targetname@
+ SRCS        = rlm_eap.c eap.c mem.c
+ HEADERS     = eap.h rlm_eap.h
+ RLM_CFLAGS  = $(INCLTDL) -Ilibeap
+-CLIENTLIBS  = libeap/$(LIBPREFIX)freeradius-eap.la
++CLIENTLIBS  = libeap/$(LIBPREFIX)freeradius-eap.la $(LIBRADIUS)
+ RLM_LIBS    = libeap/$(LIBPREFIX)freeradius-eap.la $(LIBLTDL)
+ RLM_INSTALL = install-subdirs
+ RLM_SUBDIRS = libeap @eaptypes@
