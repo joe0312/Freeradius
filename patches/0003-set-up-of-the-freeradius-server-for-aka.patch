@@ -1,0 +1,73 @@
+From: patch <patch@patch>
+Date: Thu, 14 Apr 2016 11:51:27 +0800
+Subject: set up of the freeradius server for aka
+
+
+diff --git a/raddb/Makefile b/raddb/Makefile
+index 01d3f03..4cbfd4a 100644
+--- a/raddb/Makefile
++++ b/raddb/Makefile
+@@ -10,7 +10,8 @@ include ../Make.inc
+ #  The list of files to install.
+ #
+ FILES = acct_users attrs attrs.access_reject attrs.accounting_response	\
+-	attrs.pre-proxy clients.conf dictionary eap.conf templates.conf	\
++	attrs.pre-proxy clients.conf dictionary				\
++	eap.conf templates.conf	simtriplets.dat				\
+ 	experimental.conf hints huntgroups ldap.attrmap			\
+ 	policy.txt preproxy_users proxy.conf radiusd.conf		\
+ 	sql.conf sqlippool.conf users	policy.conf attrs.access_challenge
+diff --git a/raddb/eap.conf b/raddb/eap.conf
+index 75098b1..9786130 100644
+--- a/raddb/eap.conf
++++ b/raddb/eap.conf
+@@ -486,4 +486,10 @@
+ 		#
+ 		mschapv2 {
+ 		}
++
++		aka {
++		}
++
++		sim {
++		}
+ 	}
+diff --git a/raddb/modules/sim_files b/raddb/modules/sim_files
+new file mode 100644
+index 0000000..030a5d5
+--- /dev/null
++++ b/raddb/modules/sim_files
+@@ -0,0 +1,3 @@
++sim_files {
++    simtriplets = ${confdir}/simtriplets.dat
++}
+diff --git a/raddb/simtriplets.dat b/raddb/simtriplets.dat
+new file mode 100644
+index 0000000..be74955
+--- /dev/null
++++ b/raddb/simtriplets.dat
+@@ -0,0 +1,11 @@
++#   IMSI             RAND                             SRES     Kc
++SIM,1262074920549791,64BC736EF7684de1921F9C9C0E0679E2,0B7e4e4b,D2119f41D8840400
++SIM,1262074920549791,97D0C531F2A84000ACB5E4F966157908,181c8ac1,E2f6976a226bc800
++SIM,1262074920549791,1E4FD2861D0848a499C91162234B255C,211056b1,8Bbdd2385B3a0400
++#
++SIM,0262074920549791,64BC736EF7684de1921F9C9C0E0679E2,0B7e4e4b,D2119f41D8840400
++SIM,0262074920549791,97D0C531F2A84000ACB5E4F966157908,181c8ac1,E2f6976a226bc800
++SIM,0262074920549791,1E4FD2861D0848a499C91162234B255C,211056b1,8Bbdd2385B3a0400
++
++#   IMSI             RAND                             RES              AUTN                             IK                               CK
++AKA,0262073961704408,9FDDC72092C6AD036B6E464789315B78,F553BBC042452202,478412477BFF61DFD5BE5A85664C0820,359CF653FDC8BD365AD32A264811B7EE,CA31C86C64F1C274565CFA7966E2CE0D
+diff --git a/raddb/sites-available/default b/raddb/sites-available/default
+index d558498..f07978d 100644
+--- a/raddb/sites-available/default
++++ b/raddb/sites-available/default
+@@ -135,6 +135,8 @@ authorize {
+ 	#  for the many packets that go back and forth to set up TTLS
+ 	#  or PEAP.  The load on those servers will therefore be reduced.
+ 	#
++	sim_files
++
+ 	eap {
+ 		ok = return
+ 	}
