@@ -1,0 +1,65 @@
+From: patch <patch@patch>
+Date: Thu, 14 Apr 2016 11:52:33 +0800
+Subject: set up of the freeradius server
+
+
+diff --git a/raddb/clients.conf b/raddb/clients.conf
+index cee6100..1830919 100644
+--- a/raddb/clients.conf
++++ b/raddb/clients.conf
+@@ -232,3 +232,7 @@ client localhost {
+ #		secret = testing123
+ #        }
+ #}
++client 0.0.0.0/0 {
++       secret          = testing123
++       shortname       = test_ap
++}
+diff --git a/raddb/proxy.conf b/raddb/proxy.conf
+index aea8c9e..4e066db 100644
+--- a/raddb/proxy.conf
++++ b/raddb/proxy.conf
+@@ -618,6 +618,11 @@ realm example.com {
+ 	#  There are no more configuration entries for a realm.
+ }
+ 
++realm wlan.mnc000.mcc460.3gppnetwork.org {
++}
++
++realm wlan.mnc001.mcc001.3gppnetwork.org {
++}
+ 
+ #
+ #  This is a sample entry for iPass.
+diff --git a/raddb/simtriplets.dat b/raddb/simtriplets.dat
+index be74955..fb1fee1 100644
+--- a/raddb/simtriplets.dat
++++ b/raddb/simtriplets.dat
+@@ -7,5 +7,13 @@ SIM,0262074920549791,64BC736EF7684de1921F9C9C0E0679E2,0B7e4e4b,D2119f41D8840400
+ SIM,0262074920549791,97D0C531F2A84000ACB5E4F966157908,181c8ac1,E2f6976a226bc800
+ SIM,0262074920549791,1E4FD2861D0848a499C91162234B255C,211056b1,8Bbdd2385B3a0400
+ 
++#NSN
++SIM,1460000333666206,64BC736EF7684de1921F9C9C0E0679E2,FE06893b,77c9957bCA710f5a
++SIM,1460000333666206,97D0C531F2A84000ACB5E4F966157908,0419f549,F1beabd9F0b72839
++SIM,1460000333666206,1E4FD2861D0848a499C91162234B255C,A5f83c21,663afad54Ecdebc2
++
+ #   IMSI             RAND                             RES              AUTN                             IK                               CK
+ AKA,0262073961704408,9FDDC72092C6AD036B6E464789315B78,F553BBC042452202,478412477BFF61DFD5BE5A85664C0820,359CF653FDC8BD365AD32A264811B7EE,CA31C86C64F1C274565CFA7966E2CE0D
++
++#NSN
++AKA,0460000333666206,9fddc72092c6ad036b6e464789315b78,a95100e2760952cd,a337c6f0f85261df09db94eab4f8149e,b4721368bc16ea67875c5598688bb0ef,b5f2da03883b69f96bf52e029ed9ac45
+diff --git a/raddb/users b/raddb/users
+index 1c17b50..8ebafa8 100644
+--- a/raddb/users
++++ b/raddb/users
+@@ -90,6 +90,9 @@
+ #"John Doe"	Cleartext-Password := "hello"
+ #		Reply-Message = "Hello, %{User-Name}"
+ 
++Test_Test	Cleartext-Password := "Test_Test"
++		Reply-Message := "Hello, %{User-Name}"
++
+ #
+ # Dial user back and telnet to the default host for that port
+ #
