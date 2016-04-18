@@ -11,6 +11,8 @@ endif
 
 
 define Host/Prepare
+	apt-get install openssl
+	apt-get install libssl-dev
 	mkdir -p $(PKG_SRC_DIR)
 	tar zxvf $(CURDIR)/source/$(PKG_SRC_NAME) --strip 0
 	for patch in $(shell ls patches/*.patch 2>/dev/null); do \
