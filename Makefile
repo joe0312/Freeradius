@@ -1,8 +1,13 @@
 PKG_SRC_NAME = freeradius-server-2.1.9.tar.gz
 PKG_SRC_DIR = freeradius-server-2.1.9
-TARGET_BUILD_DIR = /usr/joe/freeradius-server
+PREFIX_BUILD_DIR = /usr/joe/freeradius-server
 SIM_FILES_DIR = $(CURDIR)/$(PKG_SRC_DIR)/src/modules/rlm_sim_files
 
+
+ifeq ("$(PREFIX_BUILD_DIR)","")
+#default prefix
+PREFIX_BUILD_DIR = /usr/local
+endif
 
 
 define Host/Prepare
@@ -14,7 +19,7 @@ define Host/Prepare
 endef
 
 define Host/Configure
-	cd $(CURDIR)/$(PKG_SRC_DIR) && ./configure --prefix=$(TARGET_BUILD_DIR)
+	cd $(CURDIR)/$(PKG_SRC_DIR) && ./configure --prefix=$(PREFIX_BUILD_DIR)
 endef
 
 define Host/Compile
@@ -24,8 +29,9 @@ endef
 define Host/Install
 	$(MAKE) -C $(PKG_SRC_DIR) install	;\
 	$(MAKE) -C $(SIM_FILES_DIR)	;\
-	cp $(SIM_FILES_DIR)/.libs/rlm_sim_files-2.1.9.so $(TARGET_BUILD_DIR)/lib	;\
-	ln -s $(TARGET_BUILD_DIR)/lib/rlm_sim_files-2.1.9.so $(TARGET_BUILD_DIR)/lib/rlm_sim_files.so	;
+	cp $(SIM_FILES_DIR)/.libs/rlm_sim_files-2.1.9.so $(PREFIX_BUILD_DIR)/lib	;\
+	rm -f $(PREFIX_BUILD_DIR)/lib/rlm_sim_files.so	;\
+	ln -s $(PREFIX_BUILD_DIR)/lib/rlm_sim_files-2.1.9.so $(PREFIX_BUILD_DIR)/lib/rlm_sim_files.so	;
 endef
 
 
